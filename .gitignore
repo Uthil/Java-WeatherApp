@@ -26,6 +26,7 @@ target/
 build/
 dist/
 bin/
+
 # Compiled Class Files
 *.class
 
@@ -36,3 +37,10 @@ bin/
 
 # Virtual Machine Logs
 *.log
+
+target/
+*.jar
+*.pdf
+derby.log
+weatherAppDB/
+nbactions.xml
