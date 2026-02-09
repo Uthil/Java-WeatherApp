@@ -7,6 +7,25 @@ nbdist/
 nbactions.xml
 nb-configuration.xml
 
+# VS Code & Eclipse metadata
+.project
+.classpath
+.settings/
+bin/
+.vscode/
+
+# NetBeans artifacts
+nbproject/private/
+build/
+nbbuild/
+dist/
+nbdist/
+
+# Maven & Build artifacts
+target/
+build/
+dist/
+bin/
 # Compiled Class Files
 *.class
 
