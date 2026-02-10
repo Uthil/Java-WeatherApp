@@ -13,6 +13,12 @@ import java.util.logging.Logger;
 
 public class MainMenu extends javax.swing.JFrame {
 
+    // Δηλώσεις μεταβλητών
+    private javax.swing.JButton btnWeatherData;
+    private javax.swing.JButton btnCityList;
+    private javax.swing.JButton btnDateList;
+    private javax.swing.JButton btnStats;
+    private javax.swing.JButton btnExit;
 
     public MainMenu() {
         initComponents();
@@ -25,26 +31,26 @@ public class MainMenu extends javax.swing.JFrame {
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setResizable(false);
     
-        // Δημιουργία κύριου Panel με GridLayout (5 γραμμές, 1 στήλη, 15px κενό)
+        // 2. Δημιουργία κύριου Panel με GridLayout (5 γραμμές, 1 στήλη, 15px κενό)
         javax.swing.JPanel menuPanel = new javax.swing.JPanel();
         menuPanel.setLayout(new java.awt.GridLayout(5, 1, 15, 15));
         menuPanel.setBorder(javax.swing.BorderFactory.createEmptyBorder(30, 90, 30, 90));
 
-        // 2. Αρχικοποίηση κουμπιών με τις αντίστοιχες ετικέτες
+        // 3. Αρχικοποίηση κουμπιών με τις αντίστοιχες ετικέτες
         btnWeatherData = new javax.swing.JButton("Προβολή καιρικών δεδομένων πόλης");
         btnCityList = new javax.swing.JButton("Λίστα πόλεων αναζήτησης");
         btnDateList = new javax.swing.JButton("Λίστα ημερομηνιών αναζήτησης");
         btnStats = new javax.swing.JButton("Στατιστικά & Εκτύπωση PDF");
         btnExit = new javax.swing.JButton("Έξοδος");
 
-        // 3. Σύνδεση με τις ήδη υπάρχουσες Action methods των κουμπιών
+        // 4. Σύνδεση με τις ήδη υπάρχουσες Action methods των κουμπιών
         btnWeatherData.addActionListener(this::btnWeatherDataActionPerformed);
         btnCityList.addActionListener(this::btnCityListActionPerformed);
         btnDateList.addActionListener(this::btnDateListActionPerformed);
         btnStats.addActionListener(this::btnStatsActionPerformed);
         btnExit.addActionListener(this::btnExitActionPerformed);
 
-        // 4. Προσθήκη στο Layout 
+        // 5. Προσθήκη στο Layout 
         menuPanel.add(btnWeatherData);
         menuPanel.add(menuPanel.add(btnCityList));
         menuPanel.add(btnDateList);
@@ -102,17 +108,4 @@ public class MainMenu extends javax.swing.JFrame {
     private void btnExitActionPerformed(java.awt.event.ActionEvent evt) {
         System.exit(0);
     }
-
-
-
-    // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton btnWeatherData;
-    private javax.swing.JButton btnCityList;
-    private javax.swing.JButton btnDateList;
-    private javax.swing.JButton btnStats;
-    private javax.swing.JButton btnExit;
-    private javax.swing.JLabel jLabel1;
-    private javax.swing.JLabel jLabel3;
-    private javax.swing.JPanel jPanel1;
-    // End of variables declaration//GEN-END:variables
 }
