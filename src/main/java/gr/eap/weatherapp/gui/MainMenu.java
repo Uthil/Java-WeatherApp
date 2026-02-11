@@ -31,8 +31,21 @@ public class MainMenu extends javax.swing.JFrame {
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setResizable(false);
     
+        // 1.1 Επαναφορά background εικόνας
+        java.net.URL imgUrl = getClass().getResource("/360_F1.jpg");
+
+        if (imgUrl!= null) {
+            javax.swing.ImageIcon bgIcon = new javax.swing.ImageIcon(imgUrl);
+            javax.swing.JLabel background = new javax.swing.JLabel(bgIcon);
+            background.setLayout(new java.awt.BorderLayout());
+            this.setContentPane(background);
+        } else {
+            System.err.println("Resource not found: /360_F1.jpg");
+        }
+        
         // 2. Δημιουργία κύριου Panel με GridLayout (5 γραμμές, 1 στήλη, 15px κενό)
         javax.swing.JPanel menuPanel = new javax.swing.JPanel();
+        menuPanel.setOpaque(false);
         menuPanel.setLayout(new java.awt.GridLayout(5, 1, 15, 15));
         menuPanel.setBorder(javax.swing.BorderFactory.createEmptyBorder(30, 90, 30, 90));
 
