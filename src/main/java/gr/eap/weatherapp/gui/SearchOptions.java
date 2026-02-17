@@ -33,7 +33,7 @@ public class SearchOptions extends javax.swing.JFrame {
         setLayout(new java.awt.GridBagLayout());
         java.awt.GridBagConstraints gbc = new java.awt.GridBagConstraints();
         
-        // Τα κενά (padding) μεταξύ των στοιχείων
+        // Τα κενά μεταξύ των στοιχείων
         gbc.insets = new java.awt.Insets(10, 10, 10, 10);
 
         // 1. Τίτλος (lblTitle)
@@ -62,9 +62,6 @@ public class SearchOptions extends javax.swing.JFrame {
 
         pack();
         setLocationRelativeTo(null);
-    }
-
-    private void jRadioButton1ActionPerformed(java.awt.event.ActionEvent evt) {
     }
 
     private void btnSearchActionPerformed(java.awt.event.ActionEvent evt) {
@@ -99,20 +96,4 @@ public class SearchOptions extends javax.swing.JFrame {
         }
     }
 
-    // Initiates the data retrieval process and passes the data to the ForecastDisplay form.
-    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {
-
-        if (rbCity.isSelected()) {
-            String city = txtCityInput.getText();
-            WeatherDataParser parser = new WeatherDataParser();
-            ArrayList<ArrayList<Forecast>> weatherData = parser.parseWeatherData(HttpCall.callAPI(UrlBuilder.buildUrl(city)));
-            new ForecastDisplay(weatherData).setVisible(true);
-
-            // Create the statistics table if it does not exist
-            Crud.createTableCitySearches();
-            Crud.insertDataToCitySearches(weatherData.get(0).get(0).getCity());
-
-            System.out.println("Initiated the data retrieval process and passed the data to the ForecastDisplay form."); // Checkpoint
-            }
-        }  
 }
