@@ -28,102 +28,37 @@ public class SearchOptions extends javax.swing.JFrame {
 
     private void initComponents() {
 
-        searchTypeGroup = new javax.swing.ButtonGroup();
-        rbCity = new javax.swing.JRadioButton();
-        lblHeader = new javax.swing.JLabel();
-        rbLocation = new javax.swing.JRadioButton();
-        rbAreaCode = new javax.swing.JRadioButton();
-        rbCoordinates = new javax.swing.JRadioButton();
-        rbAirportCode = new javax.swing.JRadioButton();
-        btnSearch = new javax.swing.JButton();
-        txtCityInput = new javax.swing.JTextField();
-        lblInputPrompt = new javax.swing.JLabel();
-
+        setTitle("Search Weather Data");
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
-        setTitle("GMF Weather Application");
+        setLayout(new java.awt.GridBagLayout());
+        java.awt.GridBagConstraints gbc = new java.awt.GridBagConstraints();
+        
+        // Τα κενά (padding) μεταξύ των στοιχείων
+        gbc.insets = new java.awt.Insets(10, 10, 10, 10);
 
-        searchTypeGroup.add(rbCity);
-        rbCity.setText("Πόλη");
-        rbCity.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jRadioButton1ActionPerformed(evt);
-            }
-        });
+        // 1. Τίτλος (lblTitle)
+        lblTitle = new javax.swing.JLabel("Εισάγετε το όνομα της πόλης:");
+        lblTitle.setFont(new java.awt.Font("Segoe UI", 1, 14));
+        gbc.gridx = 0; gbc.gridy = 0; gbc.gridwidth = 2; // Καταλαμβάνει 2 στήλες
+        add(lblTitle, gbc);
 
-        lblHeader.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
-        lblHeader.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        lblHeader.setText("ΕΠΙΛΕΞΕ ΤΡΟΠΟ ΑΝΑΖΗΤΗΣΗΣ ΚΑΙΡΟΥ");
+        // 2. Πεδίο Εισαγωγής (txtCityInput)
+        txtCityInput = new javax.swing.JTextField(20);
+        gbc.gridx = 0; gbc.gridy = 1; gbc.gridwidth = 2;
+        gbc.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        add(txtCityInput, gbc);
 
-        searchTypeGroup.add(rbLocation);
-        rbLocation.setText("Τοποθεσία");
+        // 3. Κουμπί Αναζήτησης (btnSearch)
+        btnSearch = new javax.swing.JButton("Αναζήτηση");
+        btnSearch.addActionListener(this::btnSearchActionPerformed);
+        gbc.gridx = 0; gbc.gridy = 2; gbc.gridwidth = 1; // Επιστροφή σε 1 στήλη
+        add(btnSearch, gbc);
 
-        searchTypeGroup.add(rbAreaCode);
-        rbAreaCode.setText("Κωδικός Περιοχής");
-        rbAreaCode.setToolTipText("");
-
-        searchTypeGroup.add(rbCoordinates);
-        rbCoordinates.setText("Γεωγραφικές Συντεταγμένες");
-
-        searchTypeGroup.add(rbAirportCode);
-        rbAirportCode.setText("Κωδικός Αεροδρομίου");
-
-        btnSearch.setText("Αναζήτηση");
-        btnSearch.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton1ActionPerformed(evt);
-            }
-        });
-
-        lblInputPrompt.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
-        lblInputPrompt.setText("ΣΤΟΙΧΕΙΟ ΠΡΟΣ ΑΝΑΖΗΤΗΣΗ");
-
-        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
-        getContentPane().setLayout(layout);
-        layout.setHorizontalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addGap(15, 15, 15)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.CENTER)
-                            .addComponent(txtCityInput, javax.swing.GroupLayout.PREFERRED_SIZE, 174, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(lblInputPrompt))
-                        .addGap(41, 41, 41)
-                        .addComponent(btnSearch))
-                    .addComponent(rbLocation)
-                    .addComponent(rbAirportCode)
-                    .addComponent(rbCoordinates, javax.swing.GroupLayout.PREFERRED_SIZE, 186, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(rbAreaCode)
-                    .addComponent(rbCity))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(lblHeader, javax.swing.GroupLayout.PREFERRED_SIZE, 311, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(24, 24, 24))
-        );
-        layout.setVerticalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addGap(23, 23, 23)
-                .addComponent(lblHeader)
-                .addGap(18, 18, 18)
-                .addComponent(rbCity)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(rbLocation)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(rbAreaCode)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(rbCoordinates)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(rbAirportCode)
-                .addGap(18, 18, 18)
-                .addComponent(lblInputPrompt)
-                .addGap(8, 8, 8)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(btnSearch)
-                    .addComponent(txtCityInput, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(16, Short.MAX_VALUE))
-        );
+        // 4. Κουμπί Επιστροφής (btnBack)
+        btnBack = new javax.swing.JButton("Επιστροφή");
+        btnBack.addActionListener(this::btnBackActionPerformed);
+        gbc.gridx = 1; gbc.gridy = 2;
+        add(btnBack, gbc);
 
         pack();
         setLocationRelativeTo(null);
