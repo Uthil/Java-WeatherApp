@@ -67,6 +67,38 @@ public class SearchOptions extends javax.swing.JFrame {
     private void jRadioButton1ActionPerformed(java.awt.event.ActionEvent evt) {
     }
 
+    private void btnSearchActionPerformed(java.awt.event.ActionEvent evt) {
+        // Έλεγχος αν είναι επιλεγμένη η αναζήτηση ανά πόλη
+        if (rbCity.isSelected()) {
+            String city = txtSearchInput.getText().trim();
+            
+            if (city.isEmpty()) {
+                javax.swing.JOptionPane.showMessageDialog(this, "Παρακαλώ εισάγετε όνομα πόλης.");
+                return;
+            }
+
+            try {
+                // 1. Ανάκτηση Δεδομένων
+                WeatherDataParser parser = new WeatherDataParser();
+                String jsonResponse = HttpCall.callAPI(UrlBuilder.buildUrl(city));
+                ArrayList<ArrayList<Forecast>> weatherData = parser.parseWeatherData(jsonResponse);
+
+                // 2. Μετάβαση στο επόμενο Frame
+                new ForecastDisplay(weatherData).setVisible(true);
+
+                // 3. Ενημέρωση των Στατιστικών στη Βάση
+                gr.eap.weatherapp.db.Crud.createTableCitySearches();
+                gr.eap.weatherapp.db.Crud.insertDataToCitySearches(weatherData.get(0).get(0).getCity());
+                
+                System.out.println("Data passed to ForecastDisplay for city: " + city);
+            } catch (Exception e) {
+                javax.swing.JOptionPane.showMessageDialog(this, "Σφάλμα κατά την ανάκτηση δεδομένων: " + e.getMessage());
+            }
+        } else {
+            javax.swing.JOptionPane.showMessageDialog(this, "Η αναζήτηση είναι διαθέσιμη μόνο μέσω της επιλογής 'Πόλη' σε αυτή την έκδοση.");
+        }
+    }
+
     // Initiates the data retrieval process and passes the data to the ForecastDisplay form.
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {
 
