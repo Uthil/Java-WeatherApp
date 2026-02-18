@@ -90,37 +90,60 @@ public class SearchOptions extends javax.swing.JFrame {
 
     private void btnSearchActionPerformed(java.awt.event.ActionEvent evt) {
         // Έλεγχος αν είναι επιλεγμένη η αναζήτηση ανά πόλη
-        if (rbCity.isSelected()) {
-            String city = txtSearchInput.getText().trim();
-            
-            if (city.isEmpty()) {
-                JOptionPane.showMessageDialog(this, "Παρακαλώ εισάγετε όνομα πόλης.");
-                return;
-            }
+        if (!rbCity.isSelected()) {
+            JOptionPane.showMessageDialog(this, "Η επιλογή αυτή θα είναι διαθέσιμη σε μελλοντική έκδοση.");
+            return;
+        }
 
-            try {
-                // Ανάκτηση Δεδομένων
+        String city = txtSearchInput.getText().trim(); 
+        if (city.isEmpty()) {
+            JOptionPane.showMessageDialog(this, "Παρακαλώ εισάγετε όνομα πόλης.");
+            return;
+        }
+        // Απενεργοποίηση του κουμπιού όσο δουλεύει το background thread
+        btnSearch.setEnabled(false);
+        btnSearch.setText("Αναζήτηση...");
+
+        // Χρήση της SwingWorker για να μην παγώσει το Main Menu
+        SwingWorker<ArrayList<ArrayList<Forecast>>, Void> worker = new SwingWorker<>() {
+            @Override
+            protected ArrayList<ArrayList<Forecast>> doInBackground() throws Exception {
+                // 1. Κλήση του API (Στο παρασκήνιο)
                 String jsonResponse = HttpCall.callAPI(UrlBuilder.buildUrl(city));
                 
-                // Έλεγχος αν το API επέστρεψε έγκυρο JSON
-                if (jsonResponse!= null && jsonResponse.startsWith("{")) {
-                    WeatherDataParser parser = new WeatherDataParser();
-                    ArrayList<ArrayList<Forecast>> weatherData = parser.parseWeatherData(jsonResponse);
-
-                    new ForecastDisplay(weatherData).setVisible(true);
-
-                    // Ενημέρωση Βάσης
-                    Crud.createTableCitySearches();
-                    Crud.insertDataToCitySearches(weatherData.get(0).get(0).getCity());
-                } else {
-                    JOptionPane.showMessageDialog(this, "Η πόλη δεν βρέθηκε ή το API είναι προσωρινά μη διαθέσιμο.");
+                if (jsonResponse == null || !jsonResponse.trim().startsWith("{")) {
+                    throw new Exception("Η πόλη δεν βρέθηκε ή το API δεν αποκρίνεται.");
                 }
+
+                WeatherDataParser parser = new WeatherDataParser();
+                ArrayList<ArrayList<Forecast>> data = parser.parseWeatherData(jsonResponse);
+
+            // 2. Ενημέρωση Βάσης Δεδομένων (Στο παρασκήνιο)
+            try {
+                Crud.createTableCitySearches();
+                Crud.insertDataToCitySearches(data.get(0).get(0).getCity());
+            } catch (Exception dbEx) {
+                System.err.println("Database non-critical error: " + dbEx.getMessage());
+                // Δεν σταματάει η εφαρμογή αν αποτύχει μόνο η καταγραφή των στατιστικών
+            }
+            
+            return data;
+        }        
+        @Override
+        protected void done() {
+            try {
+                // Επιστροφή στο κεντρικό νήμα για την εμφάνιση του παραθύρου
+                ArrayList<ArrayList<Forecast>> weatherData = get();
+                new ForecastDisplay(weatherData).setVisible(true);
             } catch (Exception e) {
-                JOptionPane.showMessageDialog(this, "Σφάλμα: " + e.getMessage());
-            } 
-        } else {
-            JOptionPane.showMessageDialog(this, "Η επιλογή αυτή θα είναι διαθέσιμη σε μελλοντική έκδοση.");
+                JOptionPane.showMessageDialog(SearchOptions.this, e.getCause() != null ? e.getCause().getMessage() : e.getMessage());
+            } finally {
+                // Επαναφορά του GUI
+                btnSearch.setEnabled(true);
+                btnSearch.setText("Αναζήτηση");
+            }
         }
+    };
+    worker.execute();
     }
-    
 }

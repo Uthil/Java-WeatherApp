@@ -19,7 +19,7 @@ public class HttpCall {
                 return response.body().string();
             }
         } catch (IOException e) {
-            return e.getLocalizedMessage();
+            throw new RuntimeException("Σφάλμα σύνδεσης: " + e.getLocalizedMessage(), e);
         }
         return null;
     }

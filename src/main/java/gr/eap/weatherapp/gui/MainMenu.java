@@ -2,6 +2,8 @@ package gr.eap.weatherapp.gui;
 
 import gr.eap.weatherapp.db.Crud;
 import gr.eap.weatherapp.main.AppLogo;
+import gr.eap.weatherapp.main.Main;
+
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import javax.swing.*;
@@ -65,7 +67,7 @@ public class MainMenu extends javax.swing.JFrame {
 
         // 5. Προσθήκη στο Layout 
         menuPanel.add(btnWeatherData);
-        menuPanel.add(menuPanel.add(btnCityList));
+        menuPanel.add(btnCityList);
         menuPanel.add(btnDateList);
         menuPanel.add(btnStats);
         menuPanel.add(btnExit);
@@ -111,8 +113,10 @@ public class MainMenu extends javax.swing.JFrame {
         frame.setVisible(true);
         this.setEnabled(false);
         frame.addWindowListener(new WindowAdapter() {
+            @Override
             public void windowClosing(WindowEvent e) {
                 MainMenu.this.setEnabled(true);
+                MainMenu.this.toFront(); //Κάνουμε επαναφορά του Main Menu στο προσκήνιο όταν το νέο παράθυρο κλείνει
             }
         });
     }
