@@ -5,21 +5,24 @@ import gr.eap.weatherapp.main.AppLogo;
 import gr.eap.weatherapp.main.Forecast;
 import gr.eap.weatherapp.rest.*;
 import java.util.ArrayList;
+import java.awt.*;
+import javax.swing.*;
 
 
 public class SearchOptions extends javax.swing.JFrame {
 
     // Δηλώσεις μεταβλητών
     private javax.swing.ButtonGroup searchTypeGroup;
-    private javax.swing.JButton btnSearch;
     private javax.swing.JLabel lblHeader;
     private javax.swing.JLabel lblInputPrompt;
+    private javax.swing.JTextField txtSearchInput; 
     private javax.swing.JRadioButton rbCity;
     private javax.swing.JRadioButton rbLocation;
     private javax.swing.JRadioButton rbAreaCode;
     private javax.swing.JRadioButton rbCoordinates;
     private javax.swing.JRadioButton rbAirportCode;
-    private javax.swing.JTextField txtCityInput;
+    private javax.swing.JButton btnSearch;
+    private javax.swing.JButton btnBack; 
 
     public SearchOptions() {
         initComponents();
@@ -30,34 +33,55 @@ public class SearchOptions extends javax.swing.JFrame {
 
         setTitle("Search Weather Data");
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
-        setLayout(new java.awt.GridBagLayout());
-        java.awt.GridBagConstraints gbc = new java.awt.GridBagConstraints();
-        
+        setLayout(new GridBagLayout());
+        GridBagConstraints gbc = new GridBagConstraints();
         // Τα κενά μεταξύ των στοιχείων
-        gbc.insets = new java.awt.Insets(10, 10, 10, 10);
+        gbc.insets = new Insets(10, 10, 10, 10);
+        gbc.fill = GridBagConstraints.HORIZONTAL;
 
-        // 1. Τίτλος (lblTitle)
-        lblTitle = new javax.swing.JLabel("Εισάγετε το όνομα της πόλης:");
-        lblTitle.setFont(new java.awt.Font("Segoe UI", 1, 14));
+        // 1. Τίτλος
+        lblHeader = new JLabel("ΕΠΙΛΕΞΕ ΤΡΟΠΟ ΑΝΑΖΗΤΗΣΗΣ ΚΑΙΡΟΥ");
+        lblHeader.setFont(new Font("Segoe UI", 1, 14));
         gbc.gridx = 0; gbc.gridy = 0; gbc.gridwidth = 2; // Καταλαμβάνει 2 στήλες
-        add(lblTitle, gbc);
+        add(lblHeader, gbc);
 
-        // 2. Πεδίο Εισαγωγής (txtCityInput)
-        txtCityInput = new javax.swing.JTextField(20);
-        gbc.gridx = 0; gbc.gridy = 1; gbc.gridwidth = 2;
-        gbc.fill = java.awt.GridBagConstraints.HORIZONTAL;
-        add(txtCityInput, gbc);
+        // 2. ButtonGroup & Radio Buttons
+        searchTypeGroup = new ButtonGroup();
+        rbCity = new JRadioButton("Πόλη", true);
+        rbLocation = new JRadioButton("Τοποθεσία");
+        rbAreaCode = new JRadioButton("Κωδικός Περιοχής");
+        rbCoordinates = new JRadioButton("Συντεταγμένες");
+        rbAirportCode = new JRadioButton("Κωδικός Αεροδρομίου");
 
-        // 3. Κουμπί Αναζήτησης (btnSearch)
-        btnSearch = new javax.swing.JButton("Αναζήτηση");
+        searchTypeGroup.add(rbCity);
+        searchTypeGroup.add(rbLocation);
+        searchTypeGroup.add(rbAreaCode);
+        searchTypeGroup.add(rbCoordinates);
+        searchTypeGroup.add(rbAirportCode);
+
+        gbc.gridwidth = 2;
+        gbc.gridx = 0; gbc.gridy = 1; add(rbCity, gbc);
+        gbc.gridy = 2; add(rbLocation, gbc);
+        gbc.gridy = 3; add(rbAreaCode, gbc);
+        gbc.gridy = 4; add(rbCoordinates, gbc);
+        gbc.gridy = 5; add(rbAirportCode, gbc);
+
+        // 3. Input
+        lblInputPrompt = new JLabel("Στοιχείο προς αναζήτηση:");
+        gbc.gridy = 6; add(lblInputPrompt, gbc);
+        txtSearchInput = new JTextField(20);
+        gbc.gridy = 7; add(txtSearchInput, gbc);
+
+        // 4. Κουμπί Αναζήτησης (btnSearch)
+        btnSearch = new JButton("Αναζήτηση");
         btnSearch.addActionListener(this::btnSearchActionPerformed);
-        gbc.gridx = 0; gbc.gridy = 2; gbc.gridwidth = 1; // Επιστροφή σε 1 στήλη
+        gbc.gridx = 0; gbc.gridy = 8; gbc.gridwidth = 1; // Επιστροφή σε 1 στήλη
         add(btnSearch, gbc);
 
-        // 4. Κουμπί Επιστροφής (btnBack)
-        btnBack = new javax.swing.JButton("Επιστροφή");
-        btnBack.addActionListener(this::btnBackActionPerformed);
-        gbc.gridx = 1; gbc.gridy = 2;
+        // 5. Κουμπί Επιστροφής (btnBack)
+        btnBack = new JButton("Επιστροφή");
+        btnBack.addActionListener(evt -> this.dispose());
+        gbc.gridx = 1; gbc.gridy = 8;
         add(btnBack, gbc);
 
         pack();
@@ -70,30 +94,33 @@ public class SearchOptions extends javax.swing.JFrame {
             String city = txtSearchInput.getText().trim();
             
             if (city.isEmpty()) {
-                javax.swing.JOptionPane.showMessageDialog(this, "Παρακαλώ εισάγετε όνομα πόλης.");
+                JOptionPane.showMessageDialog(this, "Παρακαλώ εισάγετε όνομα πόλης.");
                 return;
             }
 
             try {
-                // 1. Ανάκτηση Δεδομένων
-                WeatherDataParser parser = new WeatherDataParser();
+                // Ανάκτηση Δεδομένων
                 String jsonResponse = HttpCall.callAPI(UrlBuilder.buildUrl(city));
-                ArrayList<ArrayList<Forecast>> weatherData = parser.parseWeatherData(jsonResponse);
-
-                // 2. Μετάβαση στο επόμενο Frame
-                new ForecastDisplay(weatherData).setVisible(true);
-
-                // 3. Ενημέρωση των Στατιστικών στη Βάση
-                gr.eap.weatherapp.db.Crud.createTableCitySearches();
-                gr.eap.weatherapp.db.Crud.insertDataToCitySearches(weatherData.get(0).get(0).getCity());
                 
-                System.out.println("Data passed to ForecastDisplay for city: " + city);
+                // Έλεγχος αν το API επέστρεψε έγκυρο JSON
+                if (jsonResponse!= null && jsonResponse.startsWith("{")) {
+                    WeatherDataParser parser = new WeatherDataParser();
+                    ArrayList<ArrayList<Forecast>> weatherData = parser.parseWeatherData(jsonResponse);
+
+                    new ForecastDisplay(weatherData).setVisible(true);
+
+                    // Ενημέρωση Βάσης
+                    Crud.createTableCitySearches();
+                    Crud.insertDataToCitySearches(weatherData.get(0).get(0).getCity());
+                } else {
+                    JOptionPane.showMessageDialog(this, "Η πόλη δεν βρέθηκε ή το API είναι προσωρινά μη διαθέσιμο.");
+                }
             } catch (Exception e) {
-                javax.swing.JOptionPane.showMessageDialog(this, "Σφάλμα κατά την ανάκτηση δεδομένων: " + e.getMessage());
-            }
+                JOptionPane.showMessageDialog(this, "Σφάλμα: " + e.getMessage());
+            } 
         } else {
-            javax.swing.JOptionPane.showMessageDialog(this, "Η αναζήτηση είναι διαθέσιμη μόνο μέσω της επιλογής 'Πόλη' σε αυτή την έκδοση.");
+            JOptionPane.showMessageDialog(this, "Η επιλογή αυτή θα είναι διαθέσιμη σε μελλοντική έκδοση.");
         }
     }
-
+    
 }
