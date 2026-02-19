@@ -2,8 +2,6 @@ package gr.eap.weatherapp.gui;
 
 import gr.eap.weatherapp.db.Crud;
 import gr.eap.weatherapp.main.AppLogo;
-import gr.eap.weatherapp.main.Main;
-
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import javax.swing.*;
