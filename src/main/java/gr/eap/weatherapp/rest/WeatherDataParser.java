@@ -36,13 +36,29 @@ public class WeatherDataParser {
 
         String dateTime = currentCondition.get("localObsDateTime").getAsString();
         String date = dateTime.split(" ")[0];
+
+        // Get astronomy data for today (sunrise/sunset/moonrise/moonset) from day 0
+        JsonObject todayAstronomy = jsonObject.getAsJsonArray("weather").get(0).getAsJsonObject().getAsJsonArray("astronomy").get(0).getAsJsonObject();
+
         forecast.setCity(city);
         forecast.setDate(date);
-        forecast.setTemperature(currentCondition.get("temp_C").getAsShort());
-        forecast.setHumidity(currentCondition.get("humidity").getAsShort());
-        forecast.setWindSpeed(currentCondition.get("windspeedKmph").getAsShort());
-        forecast.setUvIndex(currentCondition.get("uvIndex").getAsShort());
-        forecast.setWeatherDescription(currentCondition.getAsJsonArray("weatherDesc").get(0).getAsJsonObject().get("value").getAsString());
+        forecast.setTempC(currentCondition.get("temp_C").getAsInt());
+        forecast.setFeelsLikeC(currentCondition.get("FeelsLikeC").getAsInt());
+        forecast.setHumidity(currentCondition.get("humidity").getAsInt());
+        forecast.setPressure(currentCondition.get("pressure").getAsString());
+        forecast.setWindspeedKmph(currentCondition.get("windspeedKmph").getAsInt());
+        forecast.setWinddir16Point(currentCondition.get("winddir16Point").getAsString());
+        forecast.setUvIndex(currentCondition.get("uvIndex").getAsInt());
+        forecast.setVisibility(currentCondition.get("visibility").getAsInt());
+        forecast.setPrecipMM(currentCondition.get("precipMM").getAsDouble());
+        forecast.setCloudcover(currentCondition.get("cloudcover").getAsInt());
+        forecast.setChanceofrain(0); // Not available in current_condition
+        forecast.setChanceofsnow(0); // Not available in current_condition
+        forecast.setSunrise(todayAstronomy.get("sunrise").getAsString());
+        forecast.setSunset(todayAstronomy.get("sunset").getAsString());
+        forecast.setMoonrise(todayAstronomy.get("moonrise").getAsString());
+        forecast.setMoonset(todayAstronomy.get("moonset").getAsString());
+        forecast.setWeatherDesc(currentCondition.getAsJsonArray("weatherDesc").get(0).getAsJsonObject().get("value").getAsString());
 
         // Add the current condition to the full forecast.
         fullForecast.add(new ArrayList<>(1));
@@ -60,13 +76,27 @@ public class WeatherDataParser {
             for (int j = 0; j < 4; j++) {
                 forecast = new Forecast(); // New instance of forecast for each time.
 
+                JsonObject hourly = dailyForecast.get(i).getAsJsonObject().getAsJsonArray("hourly").get(time_index[j]).getAsJsonObject();
+
                 forecast.setCity(city);
                 forecast.setDate(dailyForecast.get(i).getAsJsonObject().get("date").getAsString());
-                forecast.setTemperature(dailyForecast.get(i).getAsJsonObject().getAsJsonArray("hourly").get(time_index[j]).getAsJsonObject().get("tempC").getAsShort());
-                forecast.setHumidity(dailyForecast.get(i).getAsJsonObject().getAsJsonArray("hourly").get(time_index[j]).getAsJsonObject().get("humidity").getAsShort());
-                forecast.setWindSpeed(dailyForecast.get(i).getAsJsonObject().getAsJsonArray("hourly").get(time_index[j]).getAsJsonObject().get("windspeedKmph").getAsShort());
-                forecast.setUvIndex(dailyForecast.get(i).getAsJsonObject().getAsJsonArray("hourly").get(time_index[j]).getAsJsonObject().get("uvIndex").getAsShort());
-                forecast.setWeatherDescription(dailyForecast.get(i).getAsJsonObject().getAsJsonArray("hourly").get(time_index[j]).getAsJsonObject().getAsJsonArray("weatherDesc").get(0).getAsJsonObject().get("value").getAsString());
+                forecast.setTempC(hourly.get("tempC").getAsInt());
+                forecast.setFeelsLikeC(hourly.get("FeelsLikeC").getAsInt());
+                forecast.setHumidity(hourly.get("humidity").getAsInt());
+                forecast.setPressure(hourly.get("pressure").getAsString());
+                forecast.setWindspeedKmph(hourly.get("windspeedKmph").getAsInt());
+                forecast.setWinddir16Point(hourly.get("winddir16Point").getAsString());
+                forecast.setUvIndex(hourly.get("uvIndex").getAsInt());
+                forecast.setVisibility(hourly.get("visibility").getAsInt());
+                forecast.setPrecipMM(hourly.get("precipMM").getAsDouble());
+                forecast.setCloudcover(hourly.get("cloudcover").getAsInt());
+                forecast.setChanceofrain(hourly.get("chanceofrain").getAsInt());
+                forecast.setChanceofsnow(hourly.get("chanceofsnow").getAsInt());
+                forecast.setSunrise(astronomy.get("sunrise").getAsString());
+                forecast.setSunset(astronomy.get("sunset").getAsString());
+                forecast.setMoonrise(astronomy.get("moonrise").getAsString());
+                forecast.setMoonset(astronomy.get("moonset").getAsString());
+                forecast.setWeatherDesc(hourly.getAsJsonArray("weatherDesc").get(0).getAsJsonObject().get("value").getAsString());
 
                 // Add the forecast for each time to the daily forecast.
                 fullForecast.get(i + 1).add(forecast);
