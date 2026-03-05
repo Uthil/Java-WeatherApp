@@ -8,68 +8,89 @@ public class Forecast {
     //Attributes
     private String city;
     private String date;
-    private short temperature;
-    private short humidity;
-    private short windSpeed;
-    private short uvIndex;
-    private String weatherDescription;
+   
+   //Temperature
+    private int tempC;
+    private int feelsLikeC;
+   
+   //Atmospheric
+    private int humidity;
+    private String pressure;
+    private int windspeedKmph;
+    private String winddir16Point;
+    private int uvIndex;
+    private int visibility;
+    private double precipMM;
+    private int cloudcover;
+
+    // Chance of events
+    private int chanceofrain;
+    private int chanceofsnow;
+
+    // Astronomy
+    private String sunrise;
+    private String sunset;
+    private String moonrise;
+    private String moonset;
+
+    private String weatherDesc;
 
 
     //Getters and Setters
-    public String getCity() {
-        return city;
-    }
+    public String getCity() { return city; }
+    public void setCity(String city) { this.city = city; }
 
-    public void setCity(String city) {
-        this.city = city;
-    }
-    public String getDate() {
-        return date;
-    }
+    public String getDate() { return date; }
+    public void setDate(String date) { this.date = date; }
 
-    public void setDate(String date) {
-        this.date = date;
-    }
+    public int getTempC() { return tempC; }
+    public void setTempC(int tempC) { this.tempC = tempC; }
 
-    public short getTemperature() {
-        return temperature;
-    }
+    public int getFeelsLikeC() { return feelsLikeC; }
+    public void setFeelsLikeC(int feelsLikeC) { this.feelsLikeC = feelsLikeC; }
 
-    public void setTemperature(short temperature) {
-        this.temperature = temperature;
-    }
+    public int getHumidity() { return humidity; }
+    public void setHumidity(int humidity) { this.humidity = humidity; }
 
-    public short getHumidity() {
-        return humidity;
-    }
+    public String getPressure() { return pressure; }
+    public void setPressure(String pressure) { this.pressure = pressure; }
 
-    public void setHumidity(short humidity) {
-        this.humidity = humidity;
-    }
+    public int getWindspeedKmph() { return windspeedKmph; }
+    public void setWindspeedKmph(int windspeedKmph) { this.windspeedKmph = windspeedKmph; }
 
-    public short getWindSpeed() {
-        return windSpeed;
-    }
+    public String getWinddir16Point() { return winddir16Point; }
+    public void setWinddir16Point(String winddir16Point) { this.winddir16Point = winddir16Point; }
 
-    public void setWindSpeed(short windSpeed) {
-        this.windSpeed = windSpeed;
-    }
+    public int getUvIndex() { return uvIndex; }
+    public void setUvIndex(int uvIndex) { this.uvIndex = uvIndex; }
 
-    public short getUvIndex() {
-        return uvIndex;
-    }
+    public int getVisibility() { return visibility; }
+    public void setVisibility(int visibility) { this.visibility = visibility; }
 
-    public void setUvIndex(short uvIndex) {
-        this.uvIndex = uvIndex;
-    }
+    public double getPrecipMM() { return precipMM; }
+    public void setPrecipMM(double precipMM) { this.precipMM = precipMM; }
 
-    public String getWeatherDescription() {
-        return weatherDescription;
-    }
+    public int getCloudcover() { return cloudcover; }
+    public void setCloudcover(int cloudcover) { this.cloudcover = cloudcover; }
 
-    public void setWeatherDescription(String weatherDescription) {
-        this.weatherDescription = weatherDescription;
-    }
+    public int getChanceofrain() { return chanceofrain; }
+    public void setChanceofrain(int chanceofrain) { this.chanceofrain = chanceofrain; }
 
+    public int getChanceofsnow() { return chanceofsnow; }
+    public void setChanceofsnow(int chanceofsnow) { this.chanceofsnow = chanceofsnow; }
 
+    public String getSunrise() { return sunrise; }
+    public void setSunrise(String sunrise) { this.sunrise = sunrise; }
+
+    public String getSunset() { return sunset; }
+    public void setSunset(String sunset) { this.sunset = sunset; }
+
+    public String getMoonrise() { return moonrise; }
+    public void setMoonrise(String moonrise) { this.moonrise = moonrise; }
+
+    public String getMoonset() { return moonset; }
+    public void setMoonset(String moonset) { this.moonset = moonset; }
+
+    public String getWeatherDesc() { return weatherDesc; }
+    public void setWeatherDesc(String weatherDesc) { this.weatherDesc = weatherDesc; }
 }

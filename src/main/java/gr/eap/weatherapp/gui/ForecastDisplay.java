@@ -56,7 +56,7 @@ public class ForecastDisplay extends JFrame {
                 displayFields[day][3].setText(f.getPressure());
                 displayFields[day][4].setText(f.getWindspeedKmph() + " km/h");
                 displayFields[day][5].setText(f.getWinddir16Point());
-                displayFields[day][6].setText(f.getUvIndex());
+                displayFields[day][6].setText(f.getUvIndex() + "");
                 displayFields[day][7].setText(f.getVisibility() + " km");
                 displayFields[day][8].setText(f.getPrecipMM() + " mm");
                 displayFields[day][9].setText(f.getCloudcover() + " %");
