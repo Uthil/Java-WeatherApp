@@ -92,10 +92,10 @@ public class WeatherDataParser {
                 forecast.setCloudcover(hourly.get("cloudcover").getAsInt());
                 forecast.setChanceofrain(hourly.get("chanceofrain").getAsInt());
                 forecast.setChanceofsnow(hourly.get("chanceofsnow").getAsInt());
-                forecast.setSunrise(astronomy.get("sunrise").getAsString());
-                forecast.setSunset(astronomy.get("sunset").getAsString());
-                forecast.setMoonrise(astronomy.get("moonrise").getAsString());
-                forecast.setMoonset(astronomy.get("moonset").getAsString());
+                forecast.setSunrise(todayAstronomy.get("sunrise").getAsString());
+                forecast.setSunset(todayAstronomy.get("sunset").getAsString());
+                forecast.setMoonrise(todayAstronomy.get("moonrise").getAsString());
+                forecast.setMoonset(todayAstronomy.get("moonset").getAsString());
                 forecast.setWeatherDesc(hourly.getAsJsonArray("weatherDesc").get(0).getAsJsonObject().get("value").getAsString());
 
                 // Add the forecast for each time to the daily forecast.
