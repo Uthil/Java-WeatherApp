@@ -34,3 +34,7 @@ The current development phase focuses on deep architectural improvements and bes
   - **Database:** Apache Derby (Embedded Mode)
 
 *Note: As this project is currently under active refactoring, the source code represents a transitionary state between legacy implementation and modern Java standards.*
+
+<img width="524" height="341" alt="Screenshot 2026-03-06 182826" src="https://github.com/user-attachments/assets/4965eb84-d5fe-4489-960d-71132b2abf54" />  
+<img width="585" height="457" alt="Screenshot 2026-03-06 182921" src="https://github.com/user-attachments/assets/7629c457-3ca0-411a-a11d-b67513877399" />
+<img width="1146" height="709" alt="Screenshot 2026-03-06 182958" src="https://github.com/user-attachments/assets/f48be604-4fa6-45a5-b5f6-196a13db291b" />
