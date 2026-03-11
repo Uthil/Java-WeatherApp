@@ -17,12 +17,10 @@ public class ForecastDisplay extends JFrame {
     private javax.swing.JTextField[][] displayFields = new javax.swing.JTextField[4][17];
 
     private javax.swing.JButton btnSave;
-    private javax.swing.JButton btnBack;
-    private javax.swing.JButton btnUpdate;
-    private javax.swing.JButton btnExport;
+    private javax.swing.JButton btnEdit;
+    private javax.swing.JButton btnDelete;
+    private javax.swing.JButton btnDeleteAll;
     private javax.swing.JLabel lblCityTitle;
-    private javax.swing.JPanel mainContainer;
-    private javax.swing.JPanel buttonPanel;
     
     
     // Constructor that takes the weather data as parameter.
@@ -118,14 +116,20 @@ public class ForecastDisplay extends JFrame {
 
         // 4. Panel για τα κουμπιά (Save, Back κλπ) στο κάτω μέρος
         JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT));
-        btnBack = new JButton("Επιστροφή");
-        btnSave = new JButton("Αποθήκευση στη ΒΔ");
+        btnSave = new JButton("Αποθήκευση");
+        btnEdit = new JButton("Επεξεργασία");
+        btnDelete = new JButton("Διαγραφή");
+        btnDeleteAll = new JButton("Διαγραφή Όλων");
         
-        btnBack.addActionListener(evt -> this.dispose());
-        btnSave.addActionListener(this::btnSaveActionPerformed); // Θα το φτιάξουμε στο Βήμα 4
+        btnSave.addActionListener(this::btnSaveActionPerformed);
+        btnEdit.addActionListener(this::btnEditActionPerformed);
+        btnDelete.addActionListener(this::btnDeleteActionPerformed);
+        btnDeleteAll.addActionListener(this::btnDeleteAllActionPerformed);
 
         buttonPanel.add(btnSave);
-        buttonPanel.add(btnBack);
+        buttonPanel.add(btnEdit);
+        buttonPanel.add(btnDelete);
+        buttonPanel.add(btnDeleteAll);
 
         // Προσθήκη όλων στο Frame
         add(mainDisplayPanel, BorderLayout.CENTER);
@@ -167,10 +171,9 @@ public class ForecastDisplay extends JFrame {
 
     }
 
-    
     // Opens up the EditLastSavedData window and passes the corresponding data.
     // If there are no data in the database, the user gets informed accordingly.
-    private void btnBackActionPerformed(java.awt.event.ActionEvent evt) {
+    private void btnEditActionPerformed(java.awt.event.ActionEvent evt) {
         ArrayList<Forecast> latestForecast = Crud.getLatestForecast(forecastData.get(0).get(0).getCity());
 
         if (latestForecast == null) {
@@ -180,12 +183,10 @@ public class ForecastDisplay extends JFrame {
         } else {
             new EditLastSavedForecast(latestForecast).setVisible(true);
         }
-
     }
 
-
     // Deletes the data from the database only after the user confirms the action.
-    private void btnUpdateActionPerformed(java.awt.event.ActionEvent evt) {
+    private void btnDeleteActionPerformed(java.awt.event.ActionEvent evt) {
         String city = forecastData.get(0).get(0).getCity();
         int dialogButton = JOptionPane.YES_NO_OPTION;
         int dialogResult = JOptionPane.showConfirmDialog(this,
@@ -201,7 +202,7 @@ public class ForecastDisplay extends JFrame {
 
 
     // Deletes everything only after the user confirms the action.
-    private void btnExportActionPerformed(java.awt.event.ActionEvent evt) {
+    private void btnDeleteAllActionPerformed(java.awt.event.ActionEvent evt) {
         int response = JOptionPane.showConfirmDialog(null,
                 "Είστε σίγουρος/η ότι θέλετε να διαγράψετε ΟΛΑ τα δεδομένα;",
                 "Επιβεβαίωση",
