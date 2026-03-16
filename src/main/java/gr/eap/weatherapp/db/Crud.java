@@ -103,11 +103,11 @@ public class Crud {
                 for (int j = 1; j < 4; j++) {
                     int baseIndex = (j - 1) * 6 + 4; // Calculate base index for each day
                     preparedStatement.setString(baseIndex, fullForecast.get(j).get(i).getDate());
-                    preparedStatement.setShort(baseIndex + 1, fullForecast.get(j).get(i).getTemperature());
-                    preparedStatement.setShort(baseIndex + 2, fullForecast.get(j).get(i).getHumidity());
-                    preparedStatement.setShort(baseIndex + 3, fullForecast.get(j).get(i).getWindSpeed());
-                    preparedStatement.setShort(baseIndex + 4, fullForecast.get(j).get(i).getUvIndex());
-                    preparedStatement.setString(baseIndex + 5, fullForecast.get(j).get(i).getWeatherDescription());
+                    preparedStatement.setInt(baseIndex + 1, fullForecast.get(j).get(i).getTempC());
+                    preparedStatement.setInt(baseIndex + 2, fullForecast.get(j).get(i).getHumidity());
+                    preparedStatement.setInt(baseIndex + 3, fullForecast.get(j).get(i).getWindspeedKmph());
+                    preparedStatement.setInt(baseIndex + 4, fullForecast.get(j).get(i).getUvIndex());
+                    preparedStatement.setString(baseIndex + 5, fullForecast.get(j).get(i).getWeatherDesc());
                 }
                 preparedStatement.addBatch();
             }
@@ -210,11 +210,11 @@ public class Crud {
 
                     forecast.setCity(resultSet.getString("City"));
                     forecast.setDate(resultSet.getString("Date0"));
-                    forecast.setTemperature(resultSet.getShort("temp_C0"));
-                    forecast.setHumidity(resultSet.getShort("humidity0"));
-                    forecast.setWindSpeed(resultSet.getShort("windspeedKmph0"));
-                    forecast.setUvIndex(resultSet.getShort("uvIndex0"));
-                    forecast.setWeatherDescription(resultSet.getString("weatherDesc0"));
+                    forecast.setTempC(resultSet.getInt("temp_C0"));
+                    forecast.setHumidity(resultSet.getInt("humidity0"));
+                    forecast.setWindspeedKmph(resultSet.getInt("windspeedKmph0"));
+                    forecast.setUvIndex(resultSet.getInt("uvIndex0"));
+                    forecast.setWeatherDesc(resultSet.getString("weatherDesc0"));
 
                     latestForecast.add(0,forecast);
                 }
@@ -248,11 +248,11 @@ public class Crud {
             PreparedStatement preparedStatement = connection.prepareStatement(updateSQL);
 
             for (Forecast forecast : editedForecast) {
-                preparedStatement.setShort(1, forecast.getTemperature());
-                preparedStatement.setShort(2, forecast.getHumidity());
-                preparedStatement.setShort(3, forecast.getWindSpeed());
-                preparedStatement.setShort(4, forecast.getUvIndex());
-                preparedStatement.setString(5, forecast.getWeatherDescription());
+                preparedStatement.setInt(1, forecast.getTempC());
+                preparedStatement.setInt(2, forecast.getHumidity());
+                preparedStatement.setInt(3, forecast.getWindspeedKmph());
+                preparedStatement.setInt(4, forecast.getUvIndex());
+                preparedStatement.setString(5, forecast.getWeatherDesc());
 
                 preparedStatement.setString(6, forecast.getCity());
                 preparedStatement.setString(7, forecast.getDate());
