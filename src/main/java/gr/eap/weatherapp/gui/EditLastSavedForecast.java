@@ -11,63 +11,51 @@ public class EditLastSavedForecast extends JFrame {
 
     // Attributes
     private final ArrayList<Forecast> latestForecast;
-    private final JTextField[] textFields; // Aux array to place the textfields in order.
+    private JTextField[][] editFields = new JTextField[4][5]; // Aux array to place the textfields in order.
 
+    private JTextField txtCity;
+    private JTextField txtDate;
+    private JButton btnSave;
 
     // Constructor that takes the last saved forecast as an argument.
     public EditLastSavedForecast(ArrayList<Forecast> latestForecast) {
         this.latestForecast = latestForecast;
         initComponents();
         setIconImage(AppLogo.setIconImage());
-        textFields = new JTextField[]{jTextField2, jTextField3, jTextField4, jTextField5, jTextField6         // Morning
-                                    , jTextField7, jTextField8, jTextField9, jTextField10, jTextField11       // Noon
-                                    , jTextField12, jTextField13, jTextField14, jTextField15, jTextField16    // Evening
-                                    , jTextField17, jTextField18, jTextField19, jTextField20, jTextField21};  // Night
         displayForecastData();
     }
 
-
     // This method will be used to display the forecast data in the GUI.
     private void displayForecastData() {
-
-        jTextField23.setText(latestForecast.get(0).getCity());
-        jTextField1.setText(latestForecast.get(0).getDate());
+        txtCity.setText(latestForecast.get(0).getCity());
+        txtDate.setText(latestForecast.get(0).getDate());
 
         // Display the forecast data in the textfields.
-        int i = 0;
-        for (Forecast forecast : latestForecast) {
-            textFields[i++].setText(String.valueOf(forecast.getTemperature()));
-            textFields[i++].setText(String.valueOf(forecast.getHumidity()));
-            textFields[i++].setText(String.valueOf(forecast.getWindSpeed()));
-            textFields[i++].setText(String.valueOf(forecast.getUvIndex()));
-            textFields[i++].setText(forecast.getWeatherDescription());
+        for (int i=0; i<latestForecast.size(); i++) {
+            Forecast f = latestForecast.get(i);
+            editFields[i][0].setText(String.valueOf(f.getTempC()));
+            editFields[i][1].setText(String.valueOf(f.getHumidity()));
+            editFields[i][2].setText(String.valueOf(f.getWindspeedKmph()));
+            editFields[i][3].setText(String.valueOf(f.getUvIndex()));
+            editFields[i][4].setText(String.valueOf(f.getWeatherDesc()));
         }
     }
 
-
     // This method will be used to get the updated forecast data from the textfields after the user has edited them.
     private ArrayList<Forecast> getUpdatedForecast() {
-
         ArrayList<Forecast> updatedForecast = new ArrayList<>();
 
-        int k = 0;
         for (int i = 0; i < 4; i++) {
             Forecast forecast = new Forecast();
-
             forecast.setCity(latestForecast.get(i).getCity());
             forecast.setDate(latestForecast.get(i).getDate());
 
             // If the user has left a field blank, the current value will remain unchanged.
-            forecast.setTemperature(textFields[k].getText().isEmpty() ? latestForecast.get(i).getTemperature() : Short.parseShort(textFields[k].getText()));
-            k++;
-            forecast.setHumidity(textFields[k].getText().isEmpty() ? latestForecast.get(i).getHumidity() : Short.parseShort(textFields[k].getText()));
-            k++;
-            forecast.setWindSpeed(textFields[k].getText().isEmpty() ? latestForecast.get(i).getWindSpeed() : Short.parseShort(textFields[k].getText()));
-            k++;
-            forecast.setUvIndex(textFields[k].getText().isEmpty() ? latestForecast.get(i).getUvIndex() : Short.parseShort(textFields[k].getText()));
-            k++;
-            forecast.setWeatherDescription(textFields[k].getText().isEmpty() ? latestForecast.get(i).getWeatherDescription() : textFields[k].getText());
-            k++;
+            forecast.setTempC(editFields[i][0].getText().isEmpty() ? latestForecast.get(i).getTempC() : Integer.parseInt(editFields[i][0].getText()));
+            forecast.setHumidity(editFields[i][1].getText().isEmpty() ? latestForecast.get(i).getHumidity() : Integer.parseInt(editFields[i][1].getText()));
+            forecast.setWindSpeedKmph(editFields[i][2].getText().isEmpty() ? latestForecast.get(i).getWindSpeedKmph() : Integer.parseInt(editFields[i][2].getText()));
+            forecast.setUvIndex(editFields[i][3].getText().isEmpty() ? latestForecast.get(i).getUvIndex() : Integer.parseInt(editFields[i][3].getText()));
+            forecast.setWeatherDesc(editFields[i][4].getText().isEmpty() ? latestForecast.get(i).getWeatherDesc() : editFields[i][4].getText());
 
             updatedForecast.add(forecast);
         }
@@ -76,13 +64,6 @@ public class EditLastSavedForecast extends JFrame {
 
     }
 
-
-    /**
-     * This method is called from within the constructor to initialize the form.
-     * WARNING: Do NOT modify this code. The content of this method is always
-     * regenerated by the Form Editor.
-     */
-    // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
         jPanel8 = new javax.swing.JPanel();
