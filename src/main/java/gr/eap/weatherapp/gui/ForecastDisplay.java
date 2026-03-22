@@ -3,6 +3,7 @@ package gr.eap.weatherapp.gui;
 import gr.eap.weatherapp.db.Crud;
 import gr.eap.weatherapp.main.*;
 import javax.swing.*;
+import javax.swing.border.*;
 import java.awt.*;
 import java.util.ArrayList;
 import java.time.LocalDateTime;
@@ -11,16 +12,38 @@ import java.time.format.DateTimeFormatter;
 
 public class ForecastDisplay extends JFrame {
 
+    //Setting color scheme for the GUI
+    private static final Color CLR_BG = new Color(235, 242, 250);
+    private static final Color CLR_HEADER_TOP = new Color(30,  90,  160);
+    private static final Color CLR_HEADER_BOT = new Color(60, 140, 210);
+    private static final Color CLR_DAY_HEADER = new Color(50, 110, 180);
+    private static final Color CLR_COL_HEADER = new Color(100, 160, 220);
+    private static final Color CLR_FIELD_BG = new Color(245, 250, 255);
+    private static final Color CLR_FIELD_BORDER = new Color(180, 210, 240);
+    private static final Color CLR_BTN_PRIMARY = new Color(30,  90,  160);
+    private static final Color CLR_BTN_DANGER = new Color(190,  50,  50);
+    private static final Color CLR_WHITE = Color.WHITE;
+    private static final Color CLR_TEXT_LIGHT = new Color(240, 248, 255);
+    
+    //Setting font scheme for the GUI
+    private static final Font FONT_TITLE = new Font("Segoe UI", Font.BOLD, 22);
+    private static final Font FONT_DAY = new Font("Segoe UI", Font.BOLD, 13);
+    private static final Font FONT_COL = new Font("Segoe UI", Font.BOLD, 11);
+    private static final Font FONT_LABEL = new Font("Segoe UI", Font.PLAIN, 11);
+    private static final Font FONT_FIELD = new Font("Segoe UI", Font.PLAIN, 11);
+    private static final Font FONT_BTN = new Font("Segoe UI", Font.BOLD, 12);
+
     // Attribute
     private final ArrayList<ArrayList<Forecast>> forecastData;
-    
-    private javax.swing.JTextField[][] displayFields = new javax.swing.JTextField[4][17];
+    private final JTextField[][][] fields = new JTextField[3][4][5];
 
+    private final JLabel[] lblDates = new JLabel[3];
+
+    private JLabel lblCityTitle; //City Title Label
     private javax.swing.JButton btnSave;
     private javax.swing.JButton btnEdit;
     private javax.swing.JButton btnDelete;
     private javax.swing.JButton btnDeleteAll;
-    private javax.swing.JLabel lblCityTitle;
     
     
     // Constructor that takes the weather data as parameter.
@@ -32,40 +55,31 @@ public class ForecastDisplay extends JFrame {
     }
     
     // This method will be used to display the forecast data in the GUI.
-    @SuppressWarnings("ReassignedVariable")
     private void displayData() {
         
         if (forecastData == null || forecastData.isEmpty()) return;
 
         // Ενημέρωση Τίτλου Πόλης
-        lblCityTitle.setText("Πρόγνωση Καιρού για την Πόλη: " + forecastData.get(0).get(0).getCity());
-
-        // Loop για κάθε μία από τις 4 ημέρες (Σήμερα + 3 επόμενες)
-        for (int day = 0; day < forecastData.size() && day < 4; day++) {
-            ArrayList<Forecast> dayList = forecastData.get(day);
-            if (dayList.isEmpty()) continue;
+        lblCityTitle.setText(forecastData.get(0).get(0).getCity().toUpperCase());
+        String[] fieldNames = {"Temperature (°C)", "Humidity (%)", "Wind Speed (km/h)", "UV Index", "Condition"};
         
-            Forecast f = dayList.get(0); // Παίρνουμε τα κύρια δεδομένα της ημέρας
-
-                // Γέμισμα των 17 πεδίων του πίνακα displayFields[day][index]
-                displayFields[day][0].setText(f.getTempC() + " °C");
-                displayFields[day][1].setText(f.getFeelsLikeC() + " °C");
-                displayFields[day][2].setText(f.getHumidity() + " %");
-                displayFields[day][3].setText(f.getPressure());
-                displayFields[day][4].setText(f.getWindspeedKmph() + " km/h");
-                displayFields[day][5].setText(f.getWinddir16Point());
-                displayFields[day][6].setText(f.getUvIndex() + "");
-                displayFields[day][7].setText(f.getVisibility() + " km");
-                displayFields[day][8].setText(f.getPrecipMM() + " mm");
-                displayFields[day][9].setText(f.getCloudcover() + " %");
-                displayFields[day][10].setText(f.getChanceofrain() + " %");
-                displayFields[day][11].setText(f.getChanceofsnow() + " %");
-                displayFields[day][12].setText(f.getSunrise());
-                displayFields[day][13].setText(f.getSunset());
-                displayFields[day][14].setText(f.getMoonrise());
-                displayFields[day][15].setText(f.getMoonset());
-                displayFields[day][16].setText(f.getWeatherDesc());
+        // Loop για κάθε μία από τις 4 ημέρες (Σήμερα + 3 επόμενες)
+        for (int day = 0; day < 3; day++) {
+            ArrayList<Forecast> dayList = forecastData.get(day + 1);
+            if (dayList == null || dayList.isEmpty()) continue;
+ 
+            lblDates[day].setText(dayList.get(0).getDate());
+        
+                 // Γέμισμα των 17 πεδίων του πίνακα displayFields[day][index]
+            for (int time = 0; time < 4 && time < dayList.size(); time++) {
+                Forecast f = dayList.get(time);
+                fields[day][time][0].setText(String.valueOf(f.getTempC()));
+                fields[day][time][1].setText(String.valueOf(f.getHumidity()));
+                fields[day][time][2].setText(String.valueOf(f.getWindspeedKmph()));
+                fields[day][time][3].setText(String.valueOf(f.getUvIndex()));
+                fields[day][time][4].setText(f.getWeatherDesc());
             }
+        }
     }
 
     private void initComponents() {
