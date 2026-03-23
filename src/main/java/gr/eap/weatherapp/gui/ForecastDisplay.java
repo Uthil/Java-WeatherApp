@@ -39,7 +39,7 @@ public class ForecastDisplay extends JFrame {
 
     private final JLabel[] lblDates = new JLabel[3];
 
-    private JLabel lblCityTitle; //City Title Label
+    private JLabel lblCity; //City Title Label
     private javax.swing.JButton btnSave;
     private javax.swing.JButton btnEdit;
     private javax.swing.JButton btnDelete;
@@ -60,8 +60,7 @@ public class ForecastDisplay extends JFrame {
         if (forecastData == null || forecastData.isEmpty()) return;
 
         // Ενημέρωση Τίτλου Πόλης
-        lblCityTitle.setText(forecastData.get(0).get(0).getCity().toUpperCase());
-        String[] fieldNames = {"Temperature (°C)", "Humidity (%)", "Wind Speed (km/h)", "UV Index", "Condition"};
+        lblCity.setText(forecastData.get(0).get(0).getCity().toUpperCase());
         
         // Loop για κάθε μία από τις 4 ημέρες (Σήμερα + 3 επόμενες)
         for (int day = 0; day < 3; day++) {
@@ -84,75 +83,213 @@ public class ForecastDisplay extends JFrame {
 
     private void initComponents() {
 
-        setTitle("Weather Forecast Details");
+        setTitle("Weather Forecast - 3 Day Display");
         setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
-        setLayout(new BorderLayout(10, 10));
+        getContentPane().setBackground(CLR_BG);
+        setLayout(new BorderLayout(0, 0));
 
-        // 0. Τίτλος πόλης στο πάνω μέρος
-        lblCityTitle = new JLabel("", SwingConstants.CENTER);
-        lblCityTitle.setFont(new Font("SansSerif", Font.BOLD, 16));
-        add(lblCityTitle, BorderLayout.NORTH);
+        add(buildHeader(), BorderLayout.NORTH);
+        add(buildMainPanel(), BorderLayout.CENTER);
+        add(buildButtonPanel(), BorderLayout.SOUTH);
+ 
+        pack();
+        setMinimumSize(new Dimension(900, 600));
+        setLocationRelativeTo(null);
+    }
 
-        // 1. Κεντρικό Panel που θα κρατάει 4 στήλες (Σήμερα + 3 ημέρες)
-        JPanel mainDisplayPanel = new JPanel(new GridLayout(1, 4, 15, 0));
-        mainDisplayPanel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
-
-        String[] dayTitles = {"Current Weather", "Forecast Day 1", "Forecast Day 2", "Forecast Day 3"};
-        String[] rowLabels = {"Temperature (°C)", "Feels Like (°C)", "Humidity (%)", "Pressure", "Wind Speed", 
-            "Wind Direction", "UV Index", "Visibility", "Precipitation", "Cloud Cover", "Chance of Rain", 
-            "Chance of Snow", "Sunrise", "Sunset", "Moonrise", "Moonset", "Condition"
-        };
-
-        // 2. Loop για τη δημιουργία των 4 στηλών
-        for (int day = 0; day < 4; day++) {
-            JPanel columnPanel = new JPanel(new GridBagLayout());
-            columnPanel.setBorder(BorderFactory.createTitledBorder(dayTitles[day]));
-            GridBagConstraints gbc = new GridBagConstraints();
-            gbc.insets = new Insets(2, 5, 2, 5);
-            gbc.fill = GridBagConstraints.HORIZONTAL;
-
-            // 3. Loop για τη δημιουργία των 17 πεδίων ανά στήλη
-            for (int i = 0; i < 17; i++) {
-                // Προσθήκη Label (π.χ. "Temperature")
-                gbc.gridx = 0; gbc.gridy = i; gbc.weightx = 0.3;
-                columnPanel.add(new JLabel(rowLabels[i]), gbc);
-
-                // Αρχικοποίηση και προσθήκη TextField στον 2D Πίνακα
-                displayFields[day][i] = new JTextField(10);
-                displayFields[day][i].setEditable(false);
-                displayFields[day][i].setBackground(Color.WHITE);
-                
-                gbc.gridx = 1; gbc.weightx = 0.7;
-                columnPanel.add(displayFields[day][i], gbc);
+    // επικεφαλίδα με εικονίδιο και τίτλο
+    private JPanel buildHeader() {
+        JPanel header = new JPanel(new BorderLayout()) {
+            @Override
+            protected void paintComponent(Graphics g) {
+                Graphics2D g2 = (Graphics2D) g.create();
+                g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+                GradientPaint gp = new GradientPaint(0, 0, CLR_HEADER_TOP, 0, getHeight(), CLR_HEADER_BOT);
+                g2.setPaint(gp);
+                g2.fillRect(0, 0, getWidth(), getHeight());
+                g2.dispose();
             }
-            mainDisplayPanel.add(columnPanel);
+        };
+        header.setBorder(BorderFactory.createEmptyBorder(18, 30, 18, 30));
+
+        // Εικονίδιο και Τίτλος
+        JLabel lblIcon = new JLabel("🌤");
+        lblIcon.setFont(new Font("Segoe UI Emoji", Font.PLAIN, 32));
+ 
+        lblCity = new JLabel("", SwingConstants.CENTER);
+        lblCity.setFont(FONT_TITLE);
+        lblCity.setForeground(CLR_WHITE);
+ 
+        JLabel lblSub = new JLabel("3-DAY WEATHER FORECAST", SwingConstants.CENTER);
+        lblSub.setFont(new Font("Segoe UI", Font.PLAIN, 11));
+        lblSub.setForeground(CLR_TEXT_LIGHT);
+ 
+        JPanel textPanel = new JPanel(new GridLayout(2, 1, 0, 2));
+        textPanel.setOpaque(false);
+        textPanel.add(lblCity);
+        textPanel.add(lblSub);
+ 
+        header.add(lblIcon, BorderLayout.WEST);
+        header.add(textPanel, BorderLayout.CENTER);
+ 
+        return header;
+    }
+
+    // Κύριο πάνελ με τα δεδομένα της πρόβλεψης
+    private JPanel buildMainPanel() {
+        JPanel main = new JPanel(new GridLayout(3, 1, 0, 8));
+        main.setBackground(CLR_BG);
+        main.setBorder(BorderFactory.createEmptyBorder(10, 12, 10, 12));
+ 
+        String[] dayLabels = {"Day 1", "Day 2", "Day 3"};
+ 
+        for (int day = 0; day < 3; day++) {
+            main.add(buildDayPanel(day, dayLabels[day]));
+        }
+ 
+        return main;
+    }
+
+    // Πάνελ μιας ημέρας με ημερομηνία και 4 χρονικές στιγμές
+    private JPanel buildDayPanel(int dayIndex, String dayLabel) {
+        JPanel outer = new JPanel(new BorderLayout(0, 4));
+        outer.setBackground(CLR_WHITE);
+        outer.setBorder(new CompoundBorder(
+            new LineBorder(CLR_FIELD_BORDER, 1, true),
+            BorderFactory.createEmptyBorder(0, 0, 6, 0)
+        ));
+
+        // Επικεφαλίδα ημέρας
+        JPanel dayHeader = new JPanel(new FlowLayout(FlowLayout.LEFT, 12, 6)) {
+            @Override
+            protected void paintComponent(Graphics g) {
+                Graphics2D g2 = (Graphics2D) g.create();
+                g2.setColor(CLR_DAY_HEADER);
+                g2.fillRect(0, 0, getWidth(), getHeight());
+                g2.dispose();
+            }
+        };
+        dayHeader.setOpaque(false);
+
+        JLabel lblDayName = new JLabel(dayLabel);
+        lblDayName.setFont(FONT_DAY);
+        lblDayName.setForeground(CLR_WHITE);
+ 
+        lblDates[dayIndex] = new JLabel("—");
+        lblDates[dayIndex].setFont(new Font("Segoe UI", Font.PLAIN, 12));
+        lblDates[dayIndex].setForeground(CLR_TEXT_LIGHT);
+ 
+        dayHeader.add(lblDayName);
+        dayHeader.add(new JLabel("  |  ") {{ setForeground(CLR_TEXT_LIGHT); }});
+        dayHeader.add(lblDates[dayIndex]);
+ 
+        // Πάνελ με τις 4 χρονικές στιγμές (4 στήλες)
+        JPanel colsPanel = new JPanel(new GridBagLayout());
+        colsPanel.setBackground(CLR_WHITE);
+        colsPanel.setBorder(BorderFactory.createEmptyBorder(4, 8, 4, 8));
+ 
+        GridBagConstraints gbc = new GridBagConstraints();
+        gbc.insets = new Insets(2, 4, 2, 4);
+        gbc.fill = GridBagConstraints.HORIZONTAL;
+ 
+        String[] timeLabels  = {"Morning", "Noon", "Evening", "Night"};
+        String[] fieldLabels = {"Temperature (°C)", "Humidity (%)", "Wind (km/h)", "UV Index", "Condition"};
+        
+        // Επικεφαλίδες στηλών
+        gbc.gridy = 0;
+        gbc.gridx = 0; gbc.weightx = 0.18;
+        colsPanel.add(new JLabel(""), gbc);
+ 
+        for (int t = 0; t < 4; t++) {
+            JLabel tlbl = new JLabel(timeLabels[t], SwingConstants.CENTER);
+            tlbl.setFont(FONT_COL);
+            tlbl.setForeground(CLR_DAY_HEADER);
+            tlbl.setBorder(BorderFactory.createMatteBorder(0, 0, 1, 0, CLR_COL_HEADER));
+            gbc.gridx = t + 1; gbc.weightx = 0.205;
+            colsPanel.add(tlbl, gbc);
         }
 
-        // 4. Panel για τα κουμπιά (Save, Back κλπ) στο κάτω μέρος
-        JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT));
-        btnSave = new JButton("Αποθήκευση");
-        btnEdit = new JButton("Επεξεργασία");
-        btnDelete = new JButton("Διαγραφή");
-        btnDeleteAll = new JButton("Διαγραφή Όλων");
-        
-        btnSave.addActionListener(this::btnSaveActionPerformed);
-        btnEdit.addActionListener(this::btnEditActionPerformed);
-        btnDelete.addActionListener(this::btnDeleteActionPerformed);
-        btnDeleteAll.addActionListener(this::btnDeleteAllActionPerformed);
+        // Πεδία δεδομένων
+        for (int f = 0; f < 5; f++) {
+            gbc.gridy = f + 1;
+ 
+            // Row label
+            JLabel lbl = new JLabel(fieldLabels[f]);
+            lbl.setFont(FONT_LABEL);
+            lbl.setForeground(new Color(80, 100, 130));
+            gbc.gridx = 0; gbc.weightx = 0.18;
+            colsPanel.add(lbl, gbc);
 
-        buttonPanel.add(btnSave);
-        buttonPanel.add(btnEdit);
-        buttonPanel.add(btnDelete);
-        buttonPanel.add(btnDeleteAll);
-
-        // Προσθήκη όλων στο Frame
-        add(mainDisplayPanel, BorderLayout.CENTER);
-        add(buttonPanel, BorderLayout.SOUTH);
-
-        pack();
-        setLocationRelativeTo(null);
-
+            // Πεδία για κάθε χρονική στιγμή
+             for (int t = 0; t < 4; t++) {
+                fields[dayIndex][t][f] = new JTextField(8);
+                fields[dayIndex][t][f].setEditable(false);
+                fields[dayIndex][t][f].setFont(FONT_FIELD);
+                fields[dayIndex][t][f].setBackground(CLR_FIELD_BG);
+                fields[dayIndex][t][f].setForeground(new Color(30, 60, 100));
+                fields[dayIndex][t][f].setBorder(new CompoundBorder(
+                    new LineBorder(CLR_FIELD_BORDER, 1, true),
+                    BorderFactory.createEmptyBorder(2, 6, 2, 6)
+                ));
+                fields[dayIndex][t][f].setHorizontalAlignment(JTextField.CENTER);
+                gbc.gridx = t + 1; gbc.weightx = 0.205;
+                colsPanel.add(fields[dayIndex][t][f], gbc);
+            }
+        }
+        outer.add(dayHeader, BorderLayout.NORTH);
+        outer.add(colsPanel, BorderLayout.CENTER);
+ 
+        return outer;
     }
+
+    // Πάνελ με τα κουμπιά αποθήκευσης, επεξεργασίας και διαγραφής
+    private JPanel buildButtonPanel() {
+        JPanel panel = new JPanel(new FlowLayout(FlowLayout.RIGHT, 10, 10));
+        panel.setBackground(CLR_BG);
+        panel.setBorder(new MatteBorder(1, 0, 0, 0, CLR_FIELD_BORDER));
+ 
+        btnSave = styledButton("Αποθήκευση", CLR_BTN_PRIMARY);
+        btnEdit = styledButton("Επεξεργασία", CLR_BTN_PRIMARY);
+        btnDelete = styledButton("Διαγραφή", CLR_BTN_DANGER);
+        btnDeleteAll = styledButton("⚠  Διαγραφή Όλων", CLR_BTN_DANGER);
+ 
+        btnSave.addActionListener(evt -> btnSaveActionPerformed(evt));
+        btnEdit.addActionListener(evt -> btnEditActionPerformed(evt));
+        btnDelete.addActionListener(evt -> btnDeleteActionPerformed(evt));
+        btnDeleteAll.addActionListener(evt -> btnDeleteAllActionPerformed(evt));
+ 
+        panel.add(btnSave);
+        panel.add(btnEdit);
+        panel.add(btnDelete);
+        panel.add(btnDeleteAll);
+ 
+        return panel;
+    }
+
+    private JButton styledButton(String text, Color bg) {
+        JButton btn = new JButton(text) {
+            @Override
+            protected void paintComponent(Graphics g) {
+                Graphics2D g2 = (Graphics2D) g.create();
+                g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+                g2.setColor(getModel().isPressed() ? bg.darker() :
+                            getModel().isRollover() ? bg.brighter() : bg);
+                g2.fillRoundRect(0, 0, getWidth(), getHeight(), 8, 8);
+                g2.dispose();
+                super.paintComponent(g);
+            }
+        };
+        btn.setFont(FONT_BTN);
+        btn.setForeground(CLR_WHITE);
+        btn.setOpaque(false);
+        btn.setContentAreaFilled(false);
+        btn.setBorderPainted(false);
+        btn.setFocusPainted(false);
+        btn.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+        btn.setPreferredSize(new Dimension(150, 36));
+        return btn;
+    }
+
 
     // Inserts the data to the database if they do not already exist
     private void btnSaveActionPerformed(java.awt.event.ActionEvent evt) {
