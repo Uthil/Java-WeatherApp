@@ -37,30 +37,53 @@ The current development phase focuses on deep architectural improvements and bes
 
 ## 📸 Screenshots
 
-**Main Menu**
-<img width="517" height="332" alt="main" src="https://github.com/user-attachments/assets/ad1e675f-9f23-4565-ba99-0537c68b9f42" />
+<p align="center">
+  <img width="517" height="332" alt="main" src="https://github.com/user-attachments/assets/ad1e675f-9f23-4565-ba99-0537c68b9f42" />
+  <br>
+  <strong>Main Menu</strong>
+</p>
 
-**Search by: City**
-<img width="287" height="394" alt="search" src="https://github.com/user-attachments/assets/6967c298-209d-44ec-baf8-fc2446b45afe" />
+<p align="center">
+  <img width="287" height="394" alt="search" src="https://github.com/user-attachments/assets/6967c298-209d-44ec-baf8-fc2446b45afe" />
+  <br>
+  <strong>Search by: City</strong>
+</p>
 
-**Results Window**
-*First windows with all parameters available*
-<img width="1146" height="709" alt="Screenshot 2026-03-06 182958" src="https://github.com/user-attachments/assets/f48be604-4fa6-45a5-b5f6-196a13db291b" />
+<p align="center">
+  <img width="1146" height="709" alt="results-full" src="https://github.com/user-attachments/assets/f48be604-4fa6-45a5-b5f6-196a13db291b" />
+  <br>
+  <strong>Results Window — Full Parameters View</strong><br>
+  <em>Original layout displaying all available weather parameters</em>
+</p>
 
-*New stylized Window with the original parameters available*
-<img width="886" height="781" alt="NEW" src="https://github.com/user-attachments/assets/a3b7710c-fc45-411a-b86b-76a00e3bed36" />
-*Will be added a new button under each day and viewer can check rest weather details there*
+<p align="center">
+  <img width="886" height="781" alt="NEW" src="https://github.com/user-attachments/assets/a3b7710c-fc45-411a-b86b-76a00e3bed36" />
+  <br>
+  <strong>Results Window — New Stylized View</strong><br>
+  <em>Redesigned layout with core parameters. A "Details" button per day is planned for extended weather data.</em>
+</p>
 
-**Saving the current weather data**
-<img width="890" height="782" alt="save" src="https://github.com/user-attachments/assets/a28ef8d5-a8fa-4462-a6fa-c79536a8dd33" />
+<p align="center">
+  <img width="890" height="782" alt="save" src="https://github.com/user-attachments/assets/a28ef8d5-a8fa-4462-a6fa-c79536a8dd33" />
+  <br>
+  <strong>Saving Weather Data</strong>
+</p>
 
-**Edit the saved data**
-<img width="1920" height="1032" alt="editsavedData" src="https://github.com/user-attachments/assets/5cf2ff37-8cb6-4291-a141-f118e8138ead" />
-*This window has the default (original) scale and setup, later will be changed with new style*
+<p align="center">
+  <img width="1920" height="1032" alt="editsavedData" src="https://github.com/user-attachments/assets/5cf2ff37-8cb6-4291-a141-f118e8138ead" />
+  <br>
+  <strong>Editing Saved Data</strong><br>
+  <em>Currently using the original layout — restyling planned in upcoming update</em>
+</p>
 
-**Deleting current saved data**
-<img width="1920" height="1032" alt="deleteSavedData" src="https://github.com/user-attachments/assets/ee610071-1fae-4b2a-a1a7-17983524307f" />
+<p align="center">
+  <img width="1920" height="1032" alt="deleteSavedData" src="https://github.com/user-attachments/assets/ee610071-1fae-4b2a-a1a7-17983524307f" />
+  <br>
+  <strong>Deleting City Data</strong>
+</p>
 
-**Confirmation that data was deleted from the database**
-<img width="888" height="785" alt="confirmedDeletion" src="https://github.com/user-attachments/assets/2ebe8d76-d376-4f58-af3a-7341feb0d3fe" />
-
+<p align="center">
+  <img width="888" height="785" alt="confirmedDeletion" src="https://github.com/user-attachments/assets/2ebe8d76-d376-4f58-af3a-7341feb0d3fe" />
+  <br>
+  <strong>Deletion Confirmed</strong>
+</p>
